@@ -34,10 +34,10 @@ new Vue({
       if (!this.attack()) return;
       this.switchTurns();
     },
-    attack() {
+    attack(extraDamage = 0) {
       let player = this.playerTurn ? this.player : this.monster;
       let opponent = this.playerTurn ? this.monster : this.player;
-      let damage = Math.floor(Math.random() * player.strength) + 1;
+      let damage = Math.floor(Math.random() * this.player.strength) + 1 + extraDamage;
 
       opponent.health -= damage;
 
@@ -53,7 +53,10 @@ new Vue({
       return true;
     },
     specialAttack() {
-
+      if (!this.attack(Math.floor(Math.random() * this.player.strength) + 1)) return;
+      this.switchTurns();
+      if (!this.attack(Math.floor(Math.random() * this.player.strength) + 1)) return;
+      this.switchTurns();
     },
     playerHeal() {
       this.heal();
