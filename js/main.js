@@ -74,7 +74,6 @@ new Vue({
       this.player.health += healingPower;
 
       this.log.unshift("Player heals himself for " + healingPower);
-      this.switchTurns();
     },
     giveUp() {
       this.resetGame();
