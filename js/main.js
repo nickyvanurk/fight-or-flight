@@ -21,6 +21,7 @@ new Vue({
     startGame() {
       this.showControls = true;
       this.showLog = true;
+      if (this.log.length) this.log = [];
     },
     resetGame() {
       this.player.health = 100;
@@ -31,6 +32,7 @@ new Vue({
       if (!this.attack()) return;
       this.switchTurns();
       if (!this.attack()) return;
+      this.switchTurns();
     },
     attack() {
       let player = this.playerTurn ? this.player : this.monster;
@@ -52,6 +54,12 @@ new Vue({
     },
     specialAttack() {
 
+    },
+    playerHeal() {
+      this.heal();
+      this.switchTurns();
+      if (!this.attack()) return;
+      this.switchTurns();
     },
     heal() {
       if (this.player.health == 100) return;
