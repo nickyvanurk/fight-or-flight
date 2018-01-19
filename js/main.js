@@ -22,26 +22,33 @@ new Vue({
       this.showControls = true;
       this.showLog = true;
     },
+    resetGame() {
+      this.player.health = 100;
+      this.monster.health = 100;
+      this.playerTurn = true;
+    },
     playerAttack() {
-      this.attack();
+      if (!this.attack()) return;
       this.switchTurns();
-      this.attack();
+      if (!this.attack()) return;
     },
     attack() {
       let player = this.playerTurn ? this.player : this.monster;
       let opponent = this.playerTurn ? this.monster : this.player;
       let damage = Math.floor(Math.random() * player.strength) + 1;
 
-      if (player.health == 0 || opponent.health == 0) {
-        if (this.showControls) this.showControls = false;
-        return
-      };
-
       opponent.health -= damage;
-      if (opponent.health < 0)
-        opponent.health = 0;
+
+      if (opponent.health <= 0) {
+        if (this.showControls) {
+          this.resetGame();
+          this.showControls = false;
+        }
+        return false;
+      }
 
       this.log.unshift(player.name + " hits " + opponent.name + " for " + damage);
+      return true;
     },
     specialAttack() {
 
@@ -59,6 +66,7 @@ new Vue({
       this.switchTurns();
     },
     giveUp() {
+      this.resetGame();
       this.showControls = false;
     },
     switchTurns() {
