@@ -13,7 +13,7 @@
             <h1 class="text-center">YOU</h1>
             <div class="healthbar">
                 <div class="healthbar text-center" style="background-color: green; margin: 0; color: white;" :style="{width: player.health + '%'}">
-
+                    {{ player.health }}
                 </div>
             </div>
         </div>
@@ -21,7 +21,7 @@
             <h1 class="text-center">MONSTER</h1>
             <div class="healthbar">
                 <div class="healthbar text-center" style="background-color: green; margin: 0; color: white;" :style="{width: monster.health + '%'}">
-
+                    {{ monster.health }}
                 </div>
             </div>
         </div>
@@ -33,7 +33,7 @@
     </section>
     <section class="row controls" v-show="showControls">
         <div class="small-12 columns">
-            <button id="attack" @click="attack()">ATTACK</button>
+            <button id="attack" @click="playerAttack()">ATTACK</button>
             <button id="special-attack" @click="specialAttack()">SPECIAL ATTACK</button>
             <button id="heal" @click="heal()">HEAL</button>
             <button id="give-up" @click="giveUp()">GIVE UP</button>
@@ -42,9 +42,9 @@
     <section class="row log" v-show="showLog">
         <div class="small-12 columns">
             <ul>
-                <li v-for="(entry, index) in log" :key="index">
-                    <span :class="[playerTurn ? 'player-turn' : 'monster-turn']" v-once>{{ entry }}</span>
-                </li>
+                <div v-for="(entry, index) in log" :key="entry + index">
+                    <li :class="[index % 2 ? 'player-turn' : 'monster-turn']" v-once>{{ entry }}</li>
+                </div>
             </ul>
         </div>
     </section>

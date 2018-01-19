@@ -3,8 +3,17 @@ new Vue({
   data: {
     showControls: false,
     showLog: false,
-    player: {health: 100, strength: 10, intellect: 10},
-    monster: {health: 100},
+    player: {
+      name: 'Player',
+      health: 100,
+      strength: 10,
+      intellect: 10
+    },
+    monster: {
+      name: 'Monster',
+      health: 100,
+      strength: 10
+    },
     playerTurn: true,
     log: []
   },
@@ -13,8 +22,26 @@ new Vue({
       this.showControls = true;
       this.showLog = true;
     },
+    playerAttack() {
+      this.attack();
+      this.switchTurns();
+      this.attack();
+    },
     attack() {
+      let player = this.playerTurn ? this.player : this.monster;
+      let opponent = this.playerTurn ? this.monster : this.player;
+      let damage = Math.floor(Math.random() * player.strength) + 1;
 
+      if (player.health == 0 || opponent.health == 0) {
+        if (this.showControls) this.showControls = false;
+        return
+      };
+
+      opponent.health -= damage;
+      if (opponent.health < 0)
+        opponent.health = 0;
+
+      this.log.unshift(player.name + " hits " + opponent.name + " for " + damage);
     },
     specialAttack() {
 
@@ -27,7 +54,8 @@ new Vue({
                          : this.player.intellect;
 
       this.player.health += healingPower;
-      this.log.push({"Player heals himself for " + healingPower});
+
+      this.log.unshift("Player heals himself for " + healingPower);
       this.switchTurns();
     },
     giveUp() {
